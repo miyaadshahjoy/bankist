@@ -61,6 +61,29 @@ const targetEl = header;
 const stickyObserver = new IntersectionObserver(stickyCallback, stickyOptions);
 stickyObserver.observe(targetEl);
 
+//Revealing elements on scroll
+const sections = document.querySelectorAll('.section');
+sections.forEach(section => section.classList.add('section--hidden'));
+
+const revealCallback = function (entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.remove('section--hidden');
+      observer.unobserve(entry.target);
+    }
+  });
+};
+
+const revealOptions = {
+  root: null,
+  threshold: 0.15,
+};
+
+const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
+
+sections.forEach(section => {
+  revealObserver.observe(section);
+});
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Exercises :
