@@ -7,6 +7,8 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const header = document.querySelector('.header');
+const navEl = document.querySelector('.nav');
 
 const openModal = function (e) {
   modal.classList.remove('hidden');
@@ -39,6 +41,25 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   const elementToScroll = document.querySelector(e.target.getAttribute('href'));
   elementToScroll.scrollIntoView({ behavior: 'smooth' });
 });
+
+// sticky navigation
+const stickyCallback = function (entries, observer) {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) {
+      navEl.classList.add('sticky');
+    } else navEl.classList.remove('sticky');
+  });
+};
+
+const stickyOptions = {
+  root: null,
+  threshold: 0,
+  rootMargin: `${-Number.parseInt(getComputedStyle(navEl).height)}px`,
+};
+
+const targetEl = header;
+const stickyObserver = new IntersectionObserver(stickyCallback, stickyOptions);
+stickyObserver.observe(targetEl);
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,4 +102,38 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   const elementToScroll = document.querySelector(e.target.getAttribute('href'));
   elementToScroll.scrollIntoView({ behavior: 'smooth' });
 });
+
+const sayHi = function (e) {
+  console.log(e.target);
+  console.log(`Hi ${this.name}`);
+  console.log(this);
+};
+
+document
+.querySelector('.nav__links')
+.addEventListener('click', sayHi.bind({ name: 'joy', age: 25 }));
+
+// Intersection Observer API
+// -------------------------
+const header = document.querySelector('.header');
+const navEl = document.querySelector('.nav');
+const targetEl = header;
+const stickyCallback = function (entries, observer) {
+  entries.forEach(entry => {
+    console.log(entry);
+    if (!entry.isIntersecting) {
+      navEl.classList.add('sticky');
+    } else navEl.classList.remove('sticky');
+  });
+};
+
+const stickyOptions = {
+  root: null,
+  threshold: 0,
+  rootMargin: `${-Number.parseInt(getComputedStyle(navEl).height)}px`,
+};
+
+const stickyObserver = new IntersectionObserver(stickyCallback, stickyOptions);
+stickyObserver.observe(targetEl);
+
 */
