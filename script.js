@@ -1,7 +1,6 @@
 'use strict';
 
 ///////////////////////////////////////
-// Modal window
 
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
@@ -9,7 +8,10 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const header = document.querySelector('.header');
 const navEl = document.querySelector('.nav');
+const tabButtons = document.querySelectorAll('.operations__tab');
+const tabContents = document.querySelectorAll('.operations__content');
 
+// Modal window
 const openModal = function (e) {
   modal.classList.remove('hidden');
   overlay.classList.remove('hidden');
@@ -113,6 +115,24 @@ featureImages.forEach(image => {
   lazyLoadObserver.observe(image);
 });
 
+// building tabbed component
+
+tabButtons.forEach(tabBtn => {
+  tabBtn.addEventListener('click', function (e) {
+    const clickedBtn = e.target.closest('.operations__tab');
+    const tabContent = document.querySelector(
+      `.operations__content--${clickedBtn.dataset.tab}`
+    );
+    tabButtons.forEach(tabBtn =>
+      tabBtn.classList.remove('operations__tab--active')
+    );
+    clickedBtn.classList.add('operations__tab--active');
+    tabContents.forEach(content =>
+      content.classList.remove('operations__content--active')
+    );
+    tabContent.classList.add('operations__content--active');
+  });
+});
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Exercises :
@@ -216,4 +236,26 @@ featureImages.forEach(image => {
   lazyLoadObserver.observe(image);
 });
 
+
+// building tabbed component
+
+console.log(document.querySelectorAll('.operations__tab'));
+const tabButtons = document.querySelectorAll('.operations__tab');
+const tabContents = document.querySelectorAll('.operations__content');
+tabButtons.forEach(tabBtn => {
+  tabBtn.addEventListener('click', function (e) {
+    const clickedBtn = e.target.closest('.operations__tab');
+    const tabContent = document.querySelector(
+      `.operations__content--${clickedBtn.dataset.tab}`
+    );
+    tabButtons.forEach(tabBtn =>
+      tabBtn.classList.remove('operations__tab--active')
+    );
+    clickedBtn.classList.add('operations__tab--active');
+    tabContents.forEach(content =>
+      content.classList.remove('operations__content--active')
+    );
+    tabContent.classList.add('operations__content--active');
+  });
+});
 */
