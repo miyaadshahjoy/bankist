@@ -32,9 +32,53 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+// Page navigation
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+  // implementing smooth scrolling
+  const elementToScroll = document.querySelector(e.target.getAttribute('href'));
+  elementToScroll.scrollIntoView({ behavior: 'smooth' });
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+// Exercises :
+/*
 // Event propagation : bubbling and capturing
 
 document.documentElement.addEventListener('click', function (e) {
   console.log(e.currentTarget);
   console.log(e.target);
 });
+
+
+
+// Going downwards : child
+// -----------------------
+console.log(document.querySelector('.nav__links').childNodes); // returns node list
+console.log(document.querySelector('.nav__links').children); // returns html collection
+console.log(document.querySelector('.nav__links').firstElementChild);
+console.log(document.querySelector('.nav__links').lastElementChild);
+
+// Going upwards : parent
+// ----------------------
+console.log(document.querySelector('.nav__link').parentElement);
+console.log(document.querySelector('.nav__link').parentNode);
+console.log(document.querySelector('.nav__link').closest('.nav__links'));
+
+// Going sideways: siblings
+// ------------------------
+console.log(document.querySelector('.header').nextSibling);
+console.log(document.querySelector('.header').nextElementSibling);
+console.log(document.querySelector('.header').previousSibling);
+console.log(document.querySelector('#section--2').previousElementSibling);
+
+// Event Delegation
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+  // implementing smooth scrolling
+  const elementToScroll = document.querySelector(e.target.getAttribute('href'));
+  elementToScroll.scrollIntoView({ behavior: 'smooth' });
+});
+*/
