@@ -84,6 +84,35 @@ const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
 sections.forEach(section => {
   revealObserver.observe(section);
 });
+
+// image lazy loading
+
+const featureImages = document.querySelectorAll('.features__img');
+
+const lazyLoad = function (entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const targetImage = entry.target;
+      targetImage.src = targetImage.dataset.src;
+      targetImage.addEventListener('load', function () {
+        targetImage.classList.remove('lazy-img');
+      });
+      observer.unobserve(targetImage);
+    }
+  });
+};
+
+const lazyLoadingOptions = {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+};
+
+const lazyLoadObserver = new IntersectionObserver(lazyLoad, lazyLoadingOptions);
+featureImages.forEach(image => {
+  lazyLoadObserver.observe(image);
+});
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Exercises :
@@ -158,5 +187,33 @@ const stickyOptions = {
 
 const stickyObserver = new IntersectionObserver(stickyCallback, stickyOptions);
 stickyObserver.observe(targetEl);
+
+
+// image lazy loading
+
+const featureImages = document.querySelectorAll('.features__img');
+console.log(featureImages);
+
+const lazyLoad = function (entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.src = entry.target.dataset.src;
+      entry.target.addEventListener('load', function () {
+        entry.target.classList.remove('lazy-img');
+      });
+      observer.unobserve(entry.target);
+    }
+  });
+};
+
+const lazyLoadingOptions = {
+  root: null,
+  threshold: 0,
+};
+
+const lazyLoadObserver = new IntersectionObserver(lazyLoad, lazyLoadingOptions);
+featureImages.forEach(image => {
+  lazyLoadObserver.observe(image);
+});
 
 */
