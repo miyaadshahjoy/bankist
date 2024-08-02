@@ -259,3 +259,56 @@ tabButtons.forEach(tabBtn => {
   });
 });
 */
+
+// creating slider component
+
+const leftBtn = document.querySelector('.slider__btn--left');
+const rightBtn = document.querySelector('.slider__btn--right');
+
+const slides = document.querySelectorAll('.slide');
+
+slides.forEach(
+  (slide, i) => (slide.style.transform = `translateX(${100 * i}%)`)
+);
+
+// Globals
+let currentSlide = 1;
+// 1. add eventListeners to the buttons
+// i. slide the slides to the left
+
+const slideLeft = function () {
+  currentSlide = currentSlide || slides.length;
+  console.log('Slide Left');
+  slides.forEach(
+    (slide, i) =>
+      (slide.style.transform = `translateX(${100 * (i + 1 - currentSlide)}%)`)
+  );
+  currentSlide--;
+};
+leftBtn.addEventListener('click', slideLeft);
+// ii. slide the slides to the right
+const slideRight = function () {
+  currentSlide %= slides.length;
+  console.log('Slide Right');
+  slides.forEach(
+    (slide, i) =>
+      (slide.style.transform = `translateX(${100 * (i - currentSlide)}%)`)
+  );
+  currentSlide++;
+};
+rightBtn.addEventListener('click', slideRight);
+// 2. add eventListeners to the dots
+// i. create dots
+const dotsContainer = document.querySelector('.dots');
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.classList.add('dots__dot', `dots__dot--${i + 1}`);
+  dot.setAttribute('data-dot-no', `${i + 1}`);
+  dotsContainer.append(dot);
+});
+// ii. attaching event listener to the dots
+dotsContainer.addEventListener('click', function (e) {
+  currentSlide = e.target.dataset.dotNo;
+  slideLeft();
+});
+// 3. change dot styles according to the active image
