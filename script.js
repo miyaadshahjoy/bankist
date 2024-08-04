@@ -10,6 +10,11 @@ const header = document.querySelector('.header');
 const navEl = document.querySelector('.nav');
 const tabButtons = document.querySelectorAll('.operations__tab');
 const tabContents = document.querySelectorAll('.operations__content');
+const slides = document.querySelectorAll('.slide');
+const slider = document.querySelector('.slider');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+const dotsContainer = document.querySelector('.dots');
 
 // Modal window
 const openModal = function (e) {
@@ -133,129 +138,68 @@ tabButtons.forEach(tabBtn => {
     tabContent.classList.add('operations__content--active');
   });
 });
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-// Exercises :
-/*
-// Event propagation : bubbling and capturing
 
-document.documentElement.addEventListener('click', function (e) {
-  console.log(e.currentTarget);
-  console.log(e.target);
-});
-
-
-
-// Going downwards : child
-// -----------------------
-console.log(document.querySelector('.nav__links').childNodes); // returns node list
-console.log(document.querySelector('.nav__links').children); // returns html collection
-console.log(document.querySelector('.nav__links').firstElementChild);
-console.log(document.querySelector('.nav__links').lastElementChild);
-
-// Going upwards : parent
-// ----------------------
-console.log(document.querySelector('.nav__link').parentElement);
-console.log(document.querySelector('.nav__link').parentNode);
-console.log(document.querySelector('.nav__link').closest('.nav__links'));
-
-// Going sideways: siblings
-// ------------------------
-console.log(document.querySelector('.header').nextSibling);
-console.log(document.querySelector('.header').nextElementSibling);
-console.log(document.querySelector('.header').previousSibling);
-console.log(document.querySelector('#section--2').previousElementSibling);
-
-// Event Delegation
-
-document.querySelector('.nav__links').addEventListener('click', function (e) {
-  e.preventDefault();
-  // implementing smooth scrolling
-  const elementToScroll = document.querySelector(e.target.getAttribute('href'));
-  elementToScroll.scrollIntoView({ behavior: 'smooth' });
-});
-
-const sayHi = function (e) {
-  console.log(e.target);
-  console.log(`Hi ${this.name}`);
-  console.log(this);
-};
-
-document
-.querySelector('.nav__links')
-.addEventListener('click', sayHi.bind({ name: 'joy', age: 25 }));
-
-// Intersection Observer API
-// -------------------------
-const header = document.querySelector('.header');
-const navEl = document.querySelector('.nav');
-const targetEl = header;
-const stickyCallback = function (entries, observer) {
-  entries.forEach(entry => {
-    console.log(entry);
-    if (!entry.isIntersecting) {
-      navEl.classList.add('sticky');
-    } else navEl.classList.remove('sticky');
+// creating slider component
+// Globals
+let currentSlide = 0;
+const maxSlides = slides.length;
+// functions
+//create dots
+const createDots = function () {
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.classList.add('dots__dot');
+    dot.dataset.slide = `${i}`;
+    dotsContainer.append(dot);
   });
 };
 
-const stickyOptions = {
-  root: null,
-  threshold: 0,
-  rootMargin: `${-Number.parseInt(getComputedStyle(navEl).height)}px`,
+const activateDot = function () {
+  document
+    .querySelectorAll('.dots__dot')
+    .forEach(dot => dot.classList.remove('dots__dot--active'));
+  const slide = document.querySelector(
+    `.dots__dot[data-slide="${currentSlide}"]`
+  );
+
+  slide.classList.add('dots__dot--active');
+};
+const changeSlide = function () {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${(i - currentSlide) * 100}%)`)
+  );
 };
 
-const stickyObserver = new IntersectionObserver(stickyCallback, stickyOptions);
-stickyObserver.observe(targetEl);
-
-
-// image lazy loading
-
-const featureImages = document.querySelectorAll('.features__img');
-console.log(featureImages);
-
-const lazyLoad = function (entries, observer) {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.src = entry.target.dataset.src;
-      entry.target.addEventListener('load', function () {
-        entry.target.classList.remove('lazy-img');
-      });
-      observer.unobserve(entry.target);
-    }
-  });
+const nextSlide = function () {
+  currentSlide++;
+  currentSlide %= maxSlides;
+  changeSlide();
+  activateDot();
 };
 
-const lazyLoadingOptions = {
-  root: null,
-  threshold: 0,
+const previousSlide = function () {
+  currentSlide--;
+  currentSlide = currentSlide < 0 ? maxSlides + currentSlide : currentSlide;
+  changeSlide();
+  activateDot();
 };
-
-const lazyLoadObserver = new IntersectionObserver(lazyLoad, lazyLoadingOptions);
-featureImages.forEach(image => {
-  lazyLoadObserver.observe(image);
+const init = function () {
+  createDots();
+  changeSlide();
+  activateDot();
+};
+init();
+// Event handlers
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', previousSlide);
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowLeft') previousSlide();
+  if (e.key === 'ArrowRight') nextSlide();
 });
-
-
-// building tabbed component
-
-console.log(document.querySelectorAll('.operations__tab'));
-const tabButtons = document.querySelectorAll('.operations__tab');
-const tabContents = document.querySelectorAll('.operations__content');
-tabButtons.forEach(tabBtn => {
-  tabBtn.addEventListener('click', function (e) {
-    const clickedBtn = e.target.closest('.operations__tab');
-    const tabContent = document.querySelector(
-      `.operations__content--${clickedBtn.dataset.tab}`
-    );
-    tabButtons.forEach(tabBtn =>
-      tabBtn.classList.remove('operations__tab--active')
-    );
-    clickedBtn.classList.add('operations__tab--active');
-    tabContents.forEach(content =>
-      content.classList.remove('operations__content--active')
-    );
-    tabContent.classList.add('operations__content--active');
-  });
+dotsContainer.addEventListener('click', function (e) {
+  if (e.target.classList.contains('dots__dot')) {
+    currentSlide = e.target.dataset.slide;
+    changeSlide();
+    activateDot();
+  }
 });
-*/
